@@ -3,6 +3,7 @@ package net.engineeringdigest.journalApp.entity;
 import com.mongodb.lang.NonNull;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -15,6 +16,8 @@ import java.util.List;
 @Document(collection = "users")
 @Builder
 public class User {
+    @Setter
+    @Getter
     @Id
     private ObjectId id;
 
@@ -24,23 +27,13 @@ public class User {
     @NonNull
     private String password;
     //getters, setters
-    @Getter
+    @Setter
     @DBRef
     List<JournalEntry> journalEntries = new ArrayList<JournalEntry>();
+    @Setter
+    @Getter
     private List<String> roles;
 
-
-    public List<String> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
-    }
-
-    public void setJournalEntries(List<JournalEntry> journalEntries) {
-        this.journalEntries = journalEntries;
-    }
 
     @NonNull
     public String getPassword() {
@@ -59,12 +52,11 @@ public class User {
     public void setUserName(@NonNull String userName) {
         this.userName = userName;
     }
-
-    public ObjectId getId() {
-        return id;
+    public List<JournalEntry> getJournalEntries() {
+        if (journalEntries == null) {
+            journalEntries = new ArrayList<>();
+        }
+        return journalEntries;
     }
 
-    public void setId(ObjectId id) {
-        this.id = id;
-    }
 }

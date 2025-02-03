@@ -12,10 +12,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.Authenticator;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/journal")
@@ -59,7 +57,7 @@ class JournalEntryControllerV2 {
         User user = userEntryService.findByUserName(authentication.getName());
         boolean hasAccess = user.getJournalEntries().stream().anyMatch(x -> x.getId().equals(id));
         if(hasAccess) {
-            Optional<JournalEntry> journalEntry = journalEntryService.getOne(id);
+            Optional<JournalEntry> journalEntry = journalEntryService.findById(id);
             if(journalEntry.isPresent()) {
                 return new ResponseEntity<JournalEntry>(journalEntry.get(), HttpStatus.OK);
             }
@@ -86,7 +84,7 @@ class JournalEntryControllerV2 {
         User user = userEntryService.findByUserName(userName);
         boolean hasAccess = user.getJournalEntries().stream().anyMatch(x -> x.getId().equals(id));
         if(hasAccess) {
-            Optional<JournalEntry> journalEntry = journalEntryService.getOne(id);
+            Optional<JournalEntry> journalEntry = journalEntryService.findById(id);
             if(journalEntry.isPresent()) {
                 JournalEntry oldEntry = journalEntry.get();
                 oldEntry.setTitle(newEntry.getTitle() != null && !newEntry.getTitle().equals("") ? newEntry.getTitle(): oldEntry.getTitle());

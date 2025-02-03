@@ -22,48 +22,49 @@ import java.util.Optional;
 public class UserEntryService {
 
     @Autowired
-    private UserEntryRepository userEntryRepository;
+    private UserEntryRepository userRepository;
+
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    //private static final Logger logger = LoggerFactory.getLogger(UserEntryService.class);
 
-    public void saveEntry(User user) {
-        userEntryRepository.save(user);
-    }
-
-    public void saveNewUser(User user) {
+    public boolean saveNewUser(User user) {
         try {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.setRoles(Arrays.asList("USER"));
-            userEntryRepository.save(user);
+            userRepository.save(user);
+            return true;
+        } catch (Exception e) {
+            log.error("test error");
+            log.warn("test warn");
+            log.info("test info");
+            log.debug("test debug");
+            log.trace("test trace");
+            return false;
         }
-        catch (Exception e) {
-            log.info("Error occurred for user {}", user.getUserName(), e);
-            log.debug("debugg");
-        }
-    }
-
-    public List<User> getAll() {
-        return userEntryRepository.findAll();
-    }
-
-    public Optional<User> getOne(ObjectId id) {
-        return userEntryRepository.findById(id);
-    }
-
-    public void deleteById(ObjectId id) {
-        userEntryRepository.deleteById(id);
-    }
-    public void deleteByUserName(String userName) {
-        userEntryRepository.deleteByUserName(userName);
-    }
-
-    public User findByUserName(String userName) {
-        return userEntryRepository.findByUserName(userName);
     }
 
     public void saveAdmin(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(Arrays.asList("ADMIN"));
-        userEntryRepository.save(user);
+        user.setRoles(Arrays.asList("USER", "ADMIN"));
+        userRepository.save(user);
+    }
+
+    public void saveUser(User user) {
+        userRepository.save(user);
+    }
+
+    public List<User> getAll() {
+        return userRepository.findAll();
+    }
+
+    public Optional<User> findById(ObjectId id) {
+        return userRepository.findById(id);
+    }
+
+    public void deleteById(ObjectId id) {
+        userRepository.deleteById(id);
+    }
+
+    public User findByUserName(String userName) {
+        return userRepository.findByUserName(userName);
     }
 }
