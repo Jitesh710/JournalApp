@@ -1,5 +1,6 @@
 package net.engineeringdigest.journalApp.controller;
 
+import net.engineeringdigest.journalApp.cache.CacheService;
 import net.engineeringdigest.journalApp.entity.JournalEntry;
 import net.engineeringdigest.journalApp.entity.User;
 import net.engineeringdigest.journalApp.service.UserEntryService;
@@ -17,6 +18,9 @@ public class AdminController {
     @Autowired
     private UserEntryService userEntryService;
 
+    @Autowired
+    CacheService cacheService;
+
     @GetMapping("/get-users")
     public ResponseEntity<?> getAllUsers() {
         List<User> all = userEntryService.getAll();
@@ -29,5 +33,10 @@ public class AdminController {
     @PostMapping("/create-admin-user")
     public void createAdmin(@RequestBody User admin) {
         userEntryService.saveAdmin(admin);
+    }
+
+    @GetMapping("clear-app-cache")
+    public void clearCache() {
+        cacheService.init();
     }
 }
