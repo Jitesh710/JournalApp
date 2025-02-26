@@ -1,9 +1,7 @@
 package net.engineeringdigest.journalApp.entity;
 
 import com.mongodb.lang.NonNull;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -15,6 +13,9 @@ import java.util.List;
 
 @Document(collection = "users")
 @Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Setter
     @Getter
@@ -33,7 +34,8 @@ public class User {
     @Setter
     @Getter
     private List<String> roles;
-
+    private String email;
+    private boolean sentimentAnalyis;
 
     @NonNull
     public String getPassword() {
